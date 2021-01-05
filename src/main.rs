@@ -21,8 +21,53 @@ fn main() {
     case3(&user);
     case4(&user);
 
-    let s = parse::parse();
+    let t = tree();
+    let s = parse::parse(t);
     println!("parse is {}", s.meet(&user));
+}
+
+fn tree() -> parse::ScenarioReq {
+    let data = r#"
+        {
+            "op": "and",
+            "filters": [
+                {
+                    "op": null,
+                    "filters": [
+                        {
+                            "key": "grade",
+                            "op": "gt",
+                            "val": 7
+                        }
+                    ]
+                },
+                {
+                    "op": "or",
+                    "filters": [
+                        {
+                            "op": null,
+                            "filter": {
+                                "key": "grade",
+                                "op": "gt",
+                                "val": 7
+                            }
+                        },
+                        {
+                            "op": null,
+                            "filter": {
+                                "key": "vip",
+                                "op": "eq",
+                                "val": true
+                            }
+                        }
+                    ]
+                }
+            ]
+        }"#;
+
+    // Parse the string of data into serde_json::Value.
+    let tree: parse::ScenarioReq = serde_json::from_str(data).unwrap();
+    return tree;
 }
 
 // case 1 -> not vip

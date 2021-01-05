@@ -7,7 +7,7 @@ use serde_json::Value;
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ScenarioReq {
     op: Option<String>,
-    filters: Vec<Filter>,
+    filters: Vec<Value>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -17,44 +17,48 @@ pub struct Filter {
     val: Value,
 }
 
-pub fn parse<'a>() -> Scenario<'a> {
-    let data = r#"
-        {
-            "op": null,
-            "filters": [
-                {
-                    "key": "grade",
-                    "op": "gt",
-                    "val": 7
-                },
-                {
-                    "key": "vip",
-                    "op": "eq",
-                    "val": true
-                }
-            ]
-        }"#;
-
-    // Parse the string of data into serde_json::Value.
-    let tree: ScenarioReq = serde_json::from_str(data).unwrap();
-    // let tree: ScenarioReq = serde_json::from_str(data)?;
-    println!("tree is {:?}", tree);
-
+pub fn parse<'a>(tree: ScenarioReq) -> Scenario<'a> {
     match tree.op {
-        Some(op) => Scenario::new(scenario::Vip(false)),
+        Some(op) => match op.as_str() {
+            "and" => {
+                let mut tg = scenario::TagGroup::new(scenario::Operator::And);
+                for filter in tree.filters.iter() {
+                    // 根据变量声明类型自动反序列化
+                    let res: Result<Filter> = serde_json::from_value(filter.clone());
+                    match res {
+                        Ok(f) => println!("ok is {:?}", f),
+                        Err(e) => {}
+                    }
+
+                    // if let Ok(f) = serde_json::from_value(filter.clone()) {
+
+                    // }
+
+                    // tg.add(scenario::Filter::new(Vip(true)));
+                }
+
+                return Scenario::new(scenario::Vip(false));
+            }
+            "or" => {
+                return Scenario::new(scenario::Vip(false));
+            }
+            &_ => panic!(),
+        },
         // 单个filter
         None => {
             if let Some(filter) = tree.filters.first() {
-                match filter.key.as_str() {
+                let f: Filter = serde_json::from_value(filter.clone()).unwrap();
+
+                match f.key.as_str() {
                     "grade" => {
-                        let val: i32 = serde_json::from_value(filter.val.clone()).unwrap();
+                        let val: i32 = serde_json::from_value(f.val.clone()).unwrap();
                         return Scenario::new(scenario::Grade::new(val));
                     }
                     "vip" => {
-                        let val: bool = serde_json::from_value(filter.val.clone()).unwrap();
+                        let val: bool = serde_json::from_value(f.val.clone()).unwrap();
                         return Scenario::new(scenario::Vip(val));
                     }
-                    &_ => println!("&_..."),
+                    &_ => panic!(),
                 }
             } else {
                 panic!("no item in filters.")
