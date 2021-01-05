@@ -5,12 +5,14 @@ use scenario::{Filter, Operator, PlatformGroup, Scenario, TagGroup, User, Vip};
 
 // extern crate greetings;
 mod scenario;
+mod tag;
 
 fn main() {
     // mock user
     let user = User {
         id: "vip".to_string(),
         platform: [H5],
+        grade: 7,
     };
 
     case1(&user);

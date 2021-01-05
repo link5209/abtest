@@ -1,4 +1,5 @@
 use std::{fmt::Debug, vec};
+use crate::tag;
 
 // https://stackoverflow.com/questions/25959075/why-explicit-lifetime-bound-required-for-boxt-in-struct#25959806
 pub struct Scenario<'a> {
@@ -30,6 +31,20 @@ pub struct Test;
 pub trait Tag: Debug {
     fn meet(&self, user: &User) -> bool;
     fn create_filter(self) -> Filter;
+}
+
+#[derive(Debug)]
+pub struct Grade<T: PartialOrd>(tag::Operation<T>);
+
+impl Tag for Grade<i32> {
+    fn meet(&self, user: &User) -> bool {
+        let grade = user.grade;
+        self.0.cmp(&grade)
+    }
+
+    fn create_filter(self) -> Filter {
+        Filter::Tag(Box::new(self))
+    }
 }
 
 #[derive(Debug)]
@@ -76,6 +91,7 @@ pub enum Platform {
 pub struct User {
     pub id: String,
     pub platform: [Platform; 1],
+    pub grade: i32,
 }
 
 #[derive(Debug)]
