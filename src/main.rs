@@ -1,12 +1,12 @@
 use std::vec;
 
 use scenario::Platform::{Android, Ios, H5};
-use scenario::{Filter, Operator, PlatformGroup, Scenario, TagGroup, User, Vip, Grade};
+use scenario::{Filter, Grade, Operator, PlatformGroup, Scenario, TagGroup, User, Vip};
 
 // extern crate greetings;
+mod parse;
 mod scenario;
 mod tag;
-mod parse;
 
 fn main() {
     // mock user
@@ -21,11 +21,8 @@ fn main() {
     case3(&user);
     case4(&user);
 
-    let res = parse::untyped_example();
-    match res {
-        Ok(_) => println!("res..."),
-        Err(e) => println!("err is {}", e),
-    }
+    let s = parse::parse();
+    println!("parse is {}", s.meet(&user));
 }
 
 // case 1 -> not vip
