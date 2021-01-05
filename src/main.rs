@@ -6,6 +6,7 @@ use scenario::{Filter, Operator, PlatformGroup, Scenario, TagGroup, User, Vip, G
 // extern crate greetings;
 mod scenario;
 mod tag;
+mod parse;
 
 fn main() {
     // mock user
@@ -19,6 +20,12 @@ fn main() {
     case2(&user);
     case3(&user);
     case4(&user);
+
+    let res = parse::untyped_example();
+    match res {
+        Ok(_) => println!("res..."),
+        Err(e) => println!("err is {}", e),
+    }
 }
 
 // case 1 -> not vip
