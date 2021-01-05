@@ -1,7 +1,7 @@
 use std::vec;
 
 use scenario::Platform::{Android, Ios, H5};
-use scenario::{Filter, Operator, PlatformGroup, Scenario, TagGroup, User, Vip};
+use scenario::{Filter, Operator, PlatformGroup, Scenario, TagGroup, User, Vip, Grade};
 
 // extern crate greetings;
 mod scenario;
@@ -18,6 +18,7 @@ fn main() {
     case1(&user);
     case2(&user);
     case3(&user);
+    case4(&user);
 }
 
 // case 1 -> not vip
@@ -48,4 +49,9 @@ fn case3(user: &User) {
 
     let scenario = Scenario::new(tg1);
     println!("case 3 is {}", scenario.meet(&user));
+}
+
+fn case4(user: &User) {
+    let scenario = Scenario::new(Grade::new(7));
+    println!("case 4 is {}", scenario.meet(&user));
 }

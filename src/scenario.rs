@@ -47,6 +47,14 @@ impl Tag for Grade<i32> {
     }
 }
 
+// 范型的具体类型实现
+impl Grade<i32> {
+    pub fn new(grade: i32) -> Grade<i32>{
+        let op = tag::Operation::Compare(tag::Cmp::Ge(grade));
+        Grade(op)
+    }
+}
+
 #[derive(Debug)]
 pub struct Vip(pub bool);
 
