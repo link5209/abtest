@@ -48,16 +48,17 @@ pub fn parse<'a>() -> Scenario<'a> {
                 match filter.key.as_str() {
                     "grade" => {
                         let val: i32 = serde_json::from_value(filter.val.clone()).unwrap();
-                        return Scenario::new(scenario::Grade::new(val))
+                        return Scenario::new(scenario::Grade::new(val));
                     }
-                    "vip" => println!("vip..."),
+                    "vip" => {
+                        let val: bool = serde_json::from_value(filter.val.clone()).unwrap();
+                        return Scenario::new(scenario::Vip(val));
+                    }
                     &_ => println!("&_..."),
                 }
             } else {
                 panic!("no item in filters.")
             }
-
-            Scenario::new(scenario::Vip(false))
         }
     }
 }
