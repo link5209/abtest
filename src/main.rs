@@ -4,11 +4,10 @@ use scenario::Platform::{Android, Ios, H5};
 use scenario::{Filter, Grade, Operator, PlatformGroup, Scenario, TagGroup, User, Vip};
 
 // extern crate greetings;
-mod parse;
+mod bracket;
+mod lex;
 mod scenario;
 mod tag;
-mod lex;
-mod bracket;
 
 fn main() {
     // mock user
@@ -23,60 +22,11 @@ fn main() {
     case3(&user);
     case4(&user);
 
-    lex::some_helper_function();
+    // lex::some_helper_function();
     // println!("is match {}", re);
-    
     let b = bracket::Brackets::from("and(3, or(7,3)), or(3, 6)");
-    println!("is b.are_balanced() {}", b.are_balanced());
-    
+    println!("are_balanced {}", b.are_balanced());
 
-    // let t = tree();
-    // let s = parse::parse(t);
-    // println!("parse is {}", s.meet(&user));
-}
-
-fn tree() -> parse::ScenarioReq {
-    let data = r#"
-        {
-            "op": "and",
-            "filters": [
-                {
-                    "op": null,
-                    "filters": [
-                        {
-                            "key": "grade",
-                            "op": "gt",
-                            "val": 7
-                        }
-                    ]
-                },
-                {
-                    "op": "or",
-                    "filters": [
-                        {
-                            "op": null,
-                            "filter": {
-                                "key": "grade",
-                                "op": "gt",
-                                "val": 7
-                            }
-                        },
-                        {
-                            "op": null,
-                            "filter": {
-                                "key": "vip",
-                                "op": "eq",
-                                "val": true
-                            }
-                        }
-                    ]
-                }
-            ]
-        }"#;
-
-    // Parse the string of data into serde_json::Value.
-    let tree: parse::ScenarioReq = serde_json::from_str(data).unwrap();
-    return tree;
 }
 
 // case 1 -> not vip
