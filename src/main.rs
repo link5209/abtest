@@ -8,8 +8,14 @@ mod bracket;
 mod lex;
 mod scenario;
 mod tag;
+mod parser;
 
 fn main() {
+    match parser::parse(r"vip(eq, false)") {
+        Some(f) => println!("f is {:?}", f),
+        None => println!("none..."),
+    }
+
     // mock user
     let user = User {
         id: "vip".to_string(),
@@ -17,6 +23,7 @@ fn main() {
         grade: 7,
     };
 
+    println!();
     case1(&user);
     case2(&user);
     case3(&user);
