@@ -21,7 +21,7 @@ pub fn some_helper_function() {
     let extractArgs: Regex = Regex::new(r"([^,]+\(.+?\))|([^,]+)").unwrap();
 
     let caps = extractFunc
-        .captures("and(vip(eq false), and(platform(in [5,6]), grade(gt 7)), grade(gt 7))")
+        .captures(r#"and(vip("eq", false), or(platform("in", [5, 6]), grade("gt", 7)))"#)
         .unwrap();
     println!("is match {:?}", &caps[0]);
     println!("is match {:?}", &caps[1]);
@@ -37,7 +37,7 @@ pub fn some_helper_function() {
     // let re = Regex::new(r"(\d{4})-(\d{2})-(\d{2})").unwrap();
 
     println!("....");
-    for caps in extractArgs.captures_iter(r#"vip(eq false), and(platform(in [5,6]), grade(gt 7)), grade(gt 7)"#) {
+    for caps in extractArgs.captures_iter(r#"vip("eq", false), or(platform("in", [5, 6]), grade("gt", 7))"#) {
         println!("c1 is {:?}", caps.get(1).map_or("noop", |m| m.as_str()));
         println!("c2 is {:?}", caps.get(2).map_or("noop", |m| m.as_str()));
 
