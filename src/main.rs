@@ -11,10 +11,14 @@ mod tag;
 mod parser;
 
 fn main() {
-    match parser::parse(r"vip(eq, false)") {
-        Some(f) => println!("f is {:?}", f),
-        None => println!("none..."),
-    }
+    // match parser::parse(r"vip(eq, false)") {
+    //     Some(f) => println!("f is {:?}", f),
+    //     None => println!("none..."),
+    // }
+
+    let p = parser::Parser(r"and(vip(eq, false), grade(gt, 7))");
+    let f = p.parse();
+    println!("parse is {:?}", f);
 
     // mock user
     let user = User {
