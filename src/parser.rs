@@ -12,11 +12,20 @@ pub enum Filter<'a> {
 }
 
 #[derive(Debug)]
-pub struct Parser<'a>(pub &'a str);
+pub struct Parser<'a> {
+    text: &'a str,
+}
 
 impl<'a> Parser<'a> {
+    fn new(text: &str) {
+        let extract_tag: Regex =
+            Regex::new(r"^(\b[^()|and|or]+)\((gt|ge|lt|le|eq|ne|range|in|nin),\s*(.+)\)$").unwrap();
+    }
+
     fn is_tag(&self) -> bool {
-        true
+        let extract_tag: Regex =
+            Regex::new(r"^(\b[^()|and|or]+)\((gt|ge|lt|le|eq|ne|range|in|nin),\s*(.+)\)$").unwrap();
+        extract_tag.is_match(self.text)
     }
 
     fn captures(&self) -> Filter {
@@ -24,11 +33,16 @@ impl<'a> Parser<'a> {
         // Filter::Tagroup("and", "vip(eq, false)", "grade(gt, 7)")
     }
 
-    fn is_tagroup(&self) -> bool {
-        true
+    pub fn is_tagroup(&self) -> bool {
+        // let extractFunc: Regex = Regex::new(r"(\b[^()]+)\((.*)\)$").unwrap();
+        // and(vip("eq", false), grade("gt", 7))x
+        let extract_tagroup: Regex = Regex::new(r"(\band|or)\((.+)\)$").unwrap();
+        extract_tagroup.is_match(self.text)
     }
 
     fn extractArgs(&self) -> Vec<&'a str> {
+        // match
+
         vec!["vip(eq, false)", "grade(gt, 7)"]
     }
 
@@ -38,7 +52,7 @@ impl<'a> Parser<'a> {
         } else if self.is_tagroup() {
             let mut filters = vec![];
             for arg in self.extractArgs() {
-                let p = Parser(arg);
+                let p = Parser { text: arg };
                 filters.push(p.parse());
             }
 

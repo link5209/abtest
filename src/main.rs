@@ -11,14 +11,33 @@ mod tag;
 mod parser;
 
 fn main() {
+
+    // println!("test: {}", &"Golden Eagle"[5..]);
     // match parser::parse(r"vip(eq, false)") {
     //     Some(f) => println!("f is {:?}", f),
     //     None => println!("none..."),
     // }
 
-    let p = parser::Parser(r"and(vip(eq, false), grade(gt, 7))");
-    let f = p.parse();
-    println!("parse is {:?}", f);
+    // let p = parser::Parser(r"   or(vip(eq, false), grade(gt, 7))");
+    // // let f = p.parse();
+    // let b = p.is_tagroup();
+    // println!("is_tagroup {:?}", b);
+
+    let ss = r"and(eq(vip, false), or(eq(vip, false), gt(grade, 7)), and(eq(vip, false), or(in(platform, [3,4]), gt(grade, 7))))";
+    let s = lex::Scaner{text: r"eq(vip, false)"};
+    // let s = lex::Scaner{text: r"and(eq(vip, false), gt(grade, 7))"};
+    let f = s.scan(ss);
+    // let f = s.scan(r"and(eq(vip, false), or(eq(vip, false), gt(grade, 7)))");
+    // let f = s.scan(r"and(eq(vip, false), gt(grade, 7))");
+    // let f = s.scan(r"eq(vip, false)");
+
+    println!("输入 str: {}", ss);
+    println!();
+    match f {
+        Some(f) => println!("...分词: {:?}", f),
+        None => println!("scan none..."),
+    }
+
 
     // mock user
     let user = User {
