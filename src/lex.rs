@@ -35,7 +35,7 @@ impl<'a> Scaner<'a> {
                     Some(_) => (),
                     None => (),
                 }
-            };
+            }
             let bra = bracket::Brackets::from(arg1);
             let is_b = bra.are_balanced();
             if is_b {
@@ -61,9 +61,8 @@ impl<'a> Scaner<'a> {
                         break;
                     }
                 }
-                text = &text[idx+1..];
+                text = &text[idx + 1..];
                 // println!("yyy text[end..]: {}", text);
-
             }
         }
 
@@ -169,17 +168,20 @@ impl<'a> Scaner<'a> {
 
 #[derive(Debug)]
 pub enum Filter {
-    Gt(String, String),
-    Ge(String, String),
-    Lt(String, String),
-    Le(String, String),
-    Eq(String, String),
-    Ne(String, String),
-    Range(String, String),
-    In(String, String),
-    Nin(String, String),
-    And(Vec<Option<Filter>>),
-    Or(Vec<Option<Filter>>),
+    Gt(String, String),    // Greater than comparison, expr > expr
+    Ge(String, String),    // Greater than or equal to comparison, expr >= expr
+    Lt(String, String),    // Less than comparison, expr < expr
+    Le(String, String),    // Less than or equal to comparison, expr <= expr
+    Eq(String, String),    // Equality comparison, expr == expr
+    Ne(String, String),    // Nonequality comparison, expr != expr
+    Range(String, String), // The `Range` `start..end` contains all values with `x >= start` and `x < end`.
+    // It is empty unless `start < end`, expr range[4,7]
+    In(String, String), // In, the value is in the specified array, expr in(ios, android)
+    Nin(String, String), // Not in, the value is not in the specified array, expr nin(ios, android)
+    And(Vec<Option<Filter>>), // returns true only if all the expressions specified return true,
+    // and(eq(vip, false), gt(grade, 7))
+    Or(Vec<Option<Filter>>), // returns true if at least one of the expressions specified return true,
+                             // or(eq(vip, false), gt(grade, 7))
 }
 
 // #[derive(Debug)]
